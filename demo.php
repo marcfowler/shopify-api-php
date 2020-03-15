@@ -186,7 +186,7 @@ EOT;
 
 $extractor = new ReflectionExtractor();
 
-$array1 = $extractor->getTypes(\Slince\Shopify\Model\Product::class, 'image');
+$array1 = $extractor->getTypes(\Slince\Shopify\Model\Product::class, 'mainImage');
 $array2 = $extractor->getTypes(\Slince\Shopify\Model\Product::class, 'images');
 print_r($array1);
 print_r($array2);

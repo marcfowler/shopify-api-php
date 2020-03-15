@@ -13,7 +13,7 @@ namespace Slince\Shopify\Model;
 
 use DateTime;
 
-class CustomCollectionImage
+class CollectionImage
 {
     /**
      * @var string
@@ -91,6 +91,9 @@ class CustomCollectionImage
         return $this->createdAt;
     }
 
+    /**
+     * @param DateTime|null $createdAt
+     */
     public function setCreatedAt(?DateTime $createdAt)
     {
         $this->createdAt = $createdAt;

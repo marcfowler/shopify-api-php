@@ -68,7 +68,7 @@ class SmartCollection extends Model
     protected $publishedScope;
 
     /**
-     * @var SmartCollectionImage
+     * @var CollectionImage
      */
     protected $image;
 
@@ -227,14 +227,17 @@ class SmartCollection extends Model
     }
 
     /**
-     * @return SmartCollectionImage
+     * @return CollectionImage
      */
     public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(SmartCollectionImage $image)
+    /**
+     * @param CollectionImage $image
+     */
+    public function setImage(CollectionImage $image)
     {
         $this->image = $image;
     }

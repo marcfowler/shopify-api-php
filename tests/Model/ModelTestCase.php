@@ -22,7 +22,7 @@ abstract class ModelTestCase extends TestCase
     /**
      * @var PropertyInfoExtractor
      */
-    protected $propertyInfo;
+    protected $extractor;
 
     /**
      * @var PropertyAccessor
@@ -33,10 +33,7 @@ abstract class ModelTestCase extends TestCase
     {
         parent::setUp();
         $this->hydrator = new Hydrator();
-        $this->propertyInfo = new PropertyInfoExtractor([
-            new ReflectionExtractor(),
-            new PhpDocExtractor()
-        ]);
+        $this->extractor = new ReflectionExtractor();
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -55,7 +52,7 @@ abstract class ModelTestCase extends TestCase
     {
         list($obj, $data) = $this->createModel();
         $modelClass = $this->getModelClass();
-        foreach ($this->propertyInfo->getProperties($modelClass) as $property) {
+        foreach ($this->extractor->getProperties($modelClass) as $property) {
             $snake = Inflector::tableize($property);
             $value = $this->propertyAccessor->getValue($obj, $property);
             if (!isset($data[$snake])) {
@@ -64,6 +61,22 @@ abstract class ModelTestCase extends TestCase
             if (is_scalar($value) || is_null($value)) {
                 $this->assertEquals($value, $data[$snake]);
             } else {
+                $types = $this->extractor->getTypes($modelClass, $property);
+                if (null === $types) { //generic array
+                    $this->assertIsArray($value);
+                    continue;
+                }
+//                if ($types === null) {
+//                    var_dump($modelClass, $property, $value);
+//                }
+                if ($types[0]->getBuiltinType() === 'array') {
+                    if (null === $types[0]->getCollectionValueType()) {
+                        var_dump($modelClass, $property, $value, $types);exit;
+                    }
+                    $this->assertInstanceOf($types[0]->getCollectionValueType()->getClassName(), $value[0]);
+                } else {
+                    $this->assertInstanceOf($types[0]->getClassName(), $value);
+                }
             }
         }
     }

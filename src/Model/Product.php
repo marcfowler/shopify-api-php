@@ -80,7 +80,7 @@ class Product extends Model
     /**
      * @var Image
      */
-    protected $image;
+    protected $mainImage;
 
     /**
      * @var Image[]
@@ -283,17 +283,17 @@ class Product extends Model
     /**
      * @return Image
      */
-    public function getImage()
+    public function getMainImage()
     {
-        return $this->image;
+        return $this->mainImage;
     }
 
     /**
      * @param Image $image
      */
-    public function setImage(Image $image)
+    public function setMainImage(Image $image)
     {
-        $this->image = $image;
+        $this->mainImage = $image;
     }
 
     /**
@@ -315,7 +315,7 @@ class Product extends Model
     /**
      * @param Image $image
      */
-    public function addIm2age(Image $image)
+    public function addImage(Image $image)
     {
         $this->images[] = $image;
     }

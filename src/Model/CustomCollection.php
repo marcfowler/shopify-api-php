@@ -58,7 +58,7 @@ class CustomCollection extends Model
     protected $publishedScope;
 
     /**
-     * @var CustomCollectionImage
+     * @var CollectionImage
      */
     protected $image;
 
@@ -185,7 +185,7 @@ class CustomCollection extends Model
     }
 
     /**
-     * @return CustomCollectionImage
+     * @return CollectionImage
      */
     public function getImage()
     {
@@ -193,9 +193,9 @@ class CustomCollection extends Model
     }
 
     /**
-     * @param CustomCollectionImage $image
+     * @param CollectionImage $image
      */
-    public function setImage($image)
+    public function setImage(CollectionImage $image)
     {
         $this->image = $image;
     }

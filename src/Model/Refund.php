@@ -175,7 +175,7 @@ class Refund extends Model
     /**
      * @param RefundLineItem $refundLineItem
      */
-    public function addRefundLineItem($refundLineItem)
+    public function addRefundLineItem(RefundLineItem $refundLineItem)
     {
         $this->refundLineItems[] = $refundLineItem;
     }

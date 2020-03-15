@@ -78,7 +78,7 @@ class ShippingZone extends Model
     /**
      * @param Country $country
      */
-    public function addCountry($country)
+    public function addCountry(Country $country)
     {
         $this->countries[] = $country;
     }
@@ -102,7 +102,7 @@ class ShippingZone extends Model
     /**
      * @param Province $province
      */
-    public function addProvince($province)
+    public function addProvince(Province $province)
     {
         $this->provinces[] = $province;
     }
