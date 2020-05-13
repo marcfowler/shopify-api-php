@@ -13,7 +13,6 @@ namespace Slince\Shopify;
 
 use Doctrine\Common\Inflector\Inflector;
 use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -65,7 +64,8 @@ use Slince\Shopify\Service\Contracts;
 class Client
 {
     const NAME = 'SlinceShopifyClient';
-    const VERSION = '2.4.0';
+    const VERSION = '3.0.0';
+
     /**
      * Whether delay the next request.
      *
@@ -116,32 +116,39 @@ class Client
         Service\TransactionManager::class,
         Service\WebhookManager::class,
     ];
+
     /**
      * @var HttpClient
      */
     protected $httpClient;
+
     /**
      * @var Container
      */
     protected $container;
+
     /**
      * @var CredentialInterface
      */
     protected $credential;
+
     /**
      * The shop.
      *
      * @var string
      */
     protected $shop;
+
     /**
      * @var string
      */
     protected $apiVersion = '2019-10';
+
     /**
      * @var ResponseInterface
      */
     protected $lastResponse;
+
     /**
      * @var string
      */
@@ -152,7 +159,7 @@ class Client
      */
     protected $hydrator;
 
-    public function __construct(CredentialInterface $credential, $shop, array $options = [])
+    public function __construct(CredentialInterface $credential, string $shop, array $options = [])
     {
         $this->container = new Container();
         $this->container->register($this);
@@ -164,6 +171,7 @@ class Client
 
     /**
      * Applies the array of request options to the client.
+     * @param array $options
      */
     protected function applyOptions(array $options)
     {
@@ -215,7 +223,7 @@ class Client
      *
      * @return string
      */
-    public function getShop()
+    public function getShop(): string
     {
         return $this->shop;
     }
@@ -225,7 +233,7 @@ class Client
      *
      * @param string $shop
      */
-    public function setShop($shop)
+    public function setShop(string $shop)
     {
         if (!preg_match('/^[a-zA-Z0-9\-]{3,100}\.myshopify\.(?:com|io)$/', $shop)) {
             throw new InvalidArgumentException('Shop name should be 3-100 letters, numbers, or hyphens e.g. your-store.myshopify.com');
@@ -241,7 +249,7 @@ class Client
      *
      * @return array
      */
-    public function get($resource, $query = [])
+    public function get(string $resource, array $query = []): array
     {
         return $this->doRequest('GET', $resource, [
             'query' => $query,
@@ -257,7 +265,7 @@ class Client
      *
      * @return array
      */
-    protected function doRequest($method, $resource, $options = [])
+    protected function doRequest(string $method, string $resource, array $options = []): array
     {
         $request = new Request($method, $this->buildUrl($resource), [
             'Content-Type' => 'application/json',
@@ -277,7 +285,7 @@ class Client
      *
      * @return string
      */
-    protected function buildUrl($resource)
+    protected function buildUrl(string $resource): string
     {
         return sprintf('https://%s/admin/api/%s/%s.json', $this->shop, $this->apiVersion, $resource);
     }
@@ -285,9 +293,10 @@ class Client
     /**
      * Send a request.
      *
+     * @param RequestInterface $request
+     * @param array $options
      * @return ResponseInterface
-     *
-     * @throws GuzzleException
+     * @throws ClientException
      * @codeCoverageIgnore
      */
     public function sendRequest(RequestInterface $request, array $options = [])
@@ -315,7 +324,7 @@ class Client
      *
      * @return HttpClient
      */
-    public function getHttpClient()
+    public function getHttpClient(): HttpClient
     {
         if ($this->httpClient) {
             return $this->httpClient;
@@ -331,7 +340,7 @@ class Client
      *
      * @param HttpClient $httpClient
      */
-    public function setHttpClient($httpClient)
+    public function setHttpClient(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }
@@ -345,7 +354,7 @@ class Client
      *
      * @return array
      */
-    public function post($resource, $data, $query = [])
+    public function post(string $resource, array $data, array $query = []): array
     {
         return $this->doRequest('POST', $resource, [
             'query' => $query,
@@ -362,7 +371,7 @@ class Client
      *
      * @return array
      */
-    public function put($resource, $data, $query = [])
+    public function put(string $resource, array $data, array $query = []): array
     {
         return $this->doRequest('PUT', $resource, [
             'query' => $query,
@@ -376,7 +385,7 @@ class Client
      * @param string $resource
      * @param array  $query
      */
-    public function delete($resource, $query = [])
+    public function delete(string $resource, array $query = [])
     {
         $this->doRequest('DELETE', $resource, [
             'query' => $query,
@@ -388,7 +397,7 @@ class Client
      *
      * @return ResponseInterface
      */
-    public function getLastResponse()
+    public function getLastResponse(): ?ResponseInterface
     {
         return $this->lastResponse;
     }
@@ -398,7 +407,7 @@ class Client
      *
      * @return Hydrator
      */
-    public function getHydrator()
+    public function getHydrator(): Hydrator
     {
         if ($this->hydrator) {
             return $this->hydrator;
@@ -414,7 +423,7 @@ class Client
      *
      * @throws InvalidArgumentException
      */
-    public function addServiceClass($serviceClass)
+    public function addServiceClass(string $serviceClass)
     {
         if (!is_subclass_of($serviceClass, Contracts\ManagerInterface::class)) {
             throw new InvalidArgumentException(sprintf('The service class "%s" should implement "ManagerInterface"', $serviceClass));

@@ -4,6 +4,7 @@ namespace Slince\Shopify\Tests;
 
 use Slince\Shopify\Client;
 use Slince\Shopify\Exception\RuntimeException;
+use Slince\Shopify\Exception\ClientException;
 use Slince\Shopify\PublicAppCredential;
 use Slince\Shopify\Exception\InvalidArgumentException;
 use Slince\Shopify\Service\Contracts\ManagerInterface;
@@ -166,6 +167,39 @@ class ClientTest extends TestCase
             'metaCacheDir' => __DIR__ . '/tmp',
             'apiVersion' => '2019-10'
         ]);
+    }
+
+    public function testClientException()
+    {
+        $httpClientMock = $this->getMockBuilder(\GuzzleHttp\Client::class)
+            ->setConstructorArgs([
+                ['verify' => true]
+            ])
+            ->setMethods(['send'])
+            ->getMock();
+
+        $httpClientMock->method('send')
+            ->willThrowException(
+                new \GuzzleHttp\Exception\RequestException(
+                    'Client error message.',
+                    new \GuzzleHttp\Psr7\Request('GET', '/admin/shop.json'),
+                    new \GuzzleHttp\Psr7\Response(401)
+                )
+            );
+
+        $credential = new PublicAppCredential('foobarbazfoobarbaz');
+        $client = new Client($credential, 'bar.myshopify.com', [
+            'metaCacheDir' => __DIR__ . '/tmp',
+            'httpClient' => $httpClientMock,
+        ]);
+
+        try {
+            $client->getShopManager()->get();
+        } catch (\Exception $exception) {
+            $this->assertInstanceOf(ClientException::class, $exception);
+            $this->assertEquals($exception->getMessage(), 'Client error message.');
+            $this->assertEquals($exception->getCode(), 401);
+        }
     }
 }
 

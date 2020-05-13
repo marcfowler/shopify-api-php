@@ -26,7 +26,10 @@ if ($pagination->hasNext()) {
     $products = $pagination->next();
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 # to persist across requests you can use next_page_info and previous_page_info
 $nextPageInfo = $pagination->getNextPageInfo();
 $prevPageInfo = $pagination->getPrevPageInfo();

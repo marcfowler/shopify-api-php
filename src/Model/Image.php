@@ -63,6 +63,11 @@ class Image extends Model
     protected $variantIds;
 
     /**
+     * @var string
+     */
+    protected $alt;
+
+    /**
      * @return int
      */
     public function getProductId()
@@ -200,4 +205,28 @@ class Image extends Model
     {
         $this->variantIds = $variantIds;
     }
+<<<<<<< HEAD:src/Model/Image.php
 }
+=======
+
+    /**
+     * @return string
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+
+    /**
+     * @param string $alt
+     *
+     * @return string
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+}
+>>>>>>> master:src/Manager/ProductImage/Image.php

@@ -23,19 +23,36 @@ class Order extends Model
     protected $email;
 
     /**
+<<<<<<< HEAD:src/Model/Order.php
      * @var DateTime
+=======
+     * @var \DateTimeInterface
+>>>>>>> master:src/Manager/Order/Order.php
      */
     protected $closedAt;
 
     /**
+<<<<<<< HEAD:src/Model/Order.php
      * @var DateTime
+=======
+     * @var \DateTimeInterface
+>>>>>>> master:src/Manager/Order/Order.php
      */
     protected $createdAt;
 
     /**
+<<<<<<< HEAD:src/Model/Order.php
      * @var DateTime
+=======
+     * @var \DateTimeInterface
+>>>>>>> master:src/Manager/Order/Order.php
      */
     protected $updatedAt;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    protected $deletedAt;
 
     /**
      * @var int
@@ -334,7 +351,11 @@ class Order extends Model
     }
 
     /**
+<<<<<<< HEAD:src/Model/Order.php
      * @return DateTime
+=======
+     * @return \DateTimeInterface
+>>>>>>> master:src/Manager/Order/Order.php
      */
     public function getClosedAt()
     {
@@ -347,7 +368,13 @@ class Order extends Model
     }
 
     /**
+<<<<<<< HEAD:src/Model/Order.php
      * @return DateTime
+=======
+     * @param \DateTimeInterface $closedAt
+     *
+     * @return Order
+>>>>>>> master:src/Manager/Order/Order.php
      */
     public function getCreatedAt()
     {
@@ -363,17 +390,59 @@ class Order extends Model
     }
 
     /**
-     * @return string
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTimeInterface
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
+<<<<<<< HEAD:src/Model/Order.php
     public function setUpdatedAt(?DateTime $updatedAt)
+=======
+    /**
+     * @param \DateTimeInterface $updatedAt
+     *
+     * @return Order
+     */
+    public function setUpdatedAt($updatedAt)
+>>>>>>> master:src/Manager/Order/Order.php
     {
         $this->updatedAt = $updatedAt;
     }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
 
     /**
      * @return int
