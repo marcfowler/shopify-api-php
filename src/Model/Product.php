@@ -315,7 +315,7 @@ class Product extends Model
     /**
      * @param Image $image
      */
-    public function addIm2age(Image $image)
+    public function addImage(Image $image)
     {
         $this->images[] = $image;
     }
