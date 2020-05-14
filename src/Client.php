@@ -304,18 +304,17 @@ class Client
         if (static::$delayNextRequest) {
             usleep(1000000 * rand(3, 10));
         }
-        $request = $request->withHeader('User-Agent', static::NAME.'/'.static::VERSION);
+        $request = $request->withHeader('User-Agent', static::NAME . '/' . static::VERSION);
         $request = $this->credential->applyToRequest($request);
         try {
             $response = $this->getHttpClient()->send($request, $options);
             $this->lastResponse = $response;
         } catch (RequestException $exception) {
-            $exception = new ClientException($request, $exception->getResponse(), $exception->getMessage());
+            $exception = new ClientException($request, $exception->getResponse(), $exception->getMessage(), $exception->getCode());
             throw $exception;
         }
         list($callsMade, $callsLimit) = explode('/', $response->getHeaderLine('http_x_shopify_shop_api_call_limit'));
         static::$delayNextRequest = $callsMade / $callsLimit >= 0.8;
-
         return $response;
     }
 
