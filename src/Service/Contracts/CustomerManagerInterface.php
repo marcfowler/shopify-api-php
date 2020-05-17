@@ -92,7 +92,7 @@ interface CustomerManagerInterface extends ManagerInterface
     public function search(array $query = []);
 
     /**
-     * Gets the orders of customer.
+     * Retrieves all orders belonging to a customer.
      *
      * @param int $customerId
      * @return Order[]

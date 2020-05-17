@@ -38,6 +38,11 @@ class Order extends Model
     protected $updatedAt;
 
     /**
+     * @var DateTime
+     */
+    protected $deletedAt;
+
+    /**
      * @var int
      */
     protected $number;
@@ -362,17 +367,37 @@ class Order extends Model
         $this->createdAt = $createdAt;
     }
 
+
     /**
-     * @return string
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    /**
+     * @param DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param DateTime $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Slince\Shopify;
 
 use Psr\Http\Message\ResponseInterface;
@@ -9,7 +11,7 @@ use Slince\Shopify\Service\Contracts\ManagerInterface;
 
 class CursorBasedPagination
 {
-    const LINK_REGEX = '/<(.*page_info=([a-z0-9\-]+).*)>; rel="?{type}"?/i';
+    const LINK_REGEX = '/<(.*page_info=([a-z0-9\-_]+).*)>; rel="?{type}"?/i';
 
     /**
      * @var string
@@ -31,7 +33,7 @@ class CursorBasedPagination
      */
     protected $links = [];
 
-    public function __construct(ManagerInterface $manager, $resource, $query = [])
+    public function __construct(ManagerInterface $manager, string $resource, array $query = [])
     {
         $this->manager = $manager;
         $this->resource = $resource;
@@ -44,11 +46,12 @@ class CursorBasedPagination
      * @param string $pageInfo
      * @return ModelInterface[]
      */
-    public function current($pageInfo = null)
+    public function current(?string $pageInfo = null): array
     {
         $client = $this->manager->getClient();
         $query = $this->query;
         if (null !== $pageInfo) {
+            $query = array_intersect_key($query, ['limit' => true, 'fields' => true]);
             $query['page_info'] = $pageInfo;
         }
         $data = $client->get($this->resource, $query);
@@ -57,7 +60,7 @@ class CursorBasedPagination
         return $this->manager->createMany(reset($data));
     }
 
-    protected function extractHeaderLink(ResponseInterface $response)
+    protected function extractHeaderLink(ResponseInterface $response): array
     {
         if (!$response->hasHeader('Link')) {
             return [];
@@ -85,7 +88,7 @@ class CursorBasedPagination
      *
      * @return ModelInterface[]
      */
-    public function next()
+    public function next(): array
     {
         if (!$this->hasNext()) {
             throw new RuntimeException("There's no next page");
@@ -99,7 +102,7 @@ class CursorBasedPagination
      *
      * @return bool
      */
-    public function hasNext()
+    public function hasNext(): bool
     {
         return !empty($this->links['next']);
     }
@@ -109,9 +112,9 @@ class CursorBasedPagination
      *
      * @return string|null
      */
-    public function getNextPageInfo()
+    public function getNextPageInfo(): ?string
     {
-        return $this->links['next'];
+        return $this->links['next'] ?? null;
     }
 
     /**
@@ -119,7 +122,7 @@ class CursorBasedPagination
      *
      * @return ModelInterface[]
      */
-    public function prev()
+    public function prev(): array
     {
         if (!$this->hasPrev()) {
             throw new RuntimeException("There's no previous page");
@@ -133,7 +136,7 @@ class CursorBasedPagination
      *
      * @return bool
      */
-    public function hasPrev()
+    public function hasPrev(): bool
     {
         return !empty($this->links['previous']);
     }
@@ -143,8 +146,8 @@ class CursorBasedPagination
      *
      * @return string|null
      */
-    public function getPrevPageInfo()
+    public function getPrevPageInfo(): ?string
     {
-        return $this->links['previous'];
+        return $this->links['previous'] ?? null;
     }
 }

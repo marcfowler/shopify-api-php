@@ -2,6 +2,6 @@
 .idea/
 composer.lock
 /logs/
-/tests/tmp/*
 *tmp*
 .phpunit.result.cache
+.DS_Store
